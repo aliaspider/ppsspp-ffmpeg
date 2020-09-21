@@ -78,7 +78,8 @@ function build_WUP
 ./configure --target-os=linux \
     --prefix=./wiiu \
     ${GENERAL} \
-    --extra-cflags="-O3 -fasm -Wno-psabi -fno-short-enums -fno-strict-aliasing -finline-limit=300 -mcpu=750 -meabi -mhard-float -D__wiiu__ -DHW_WUP -D__powerpc__ -DWORDS_BIGENDIAN -DFD_SETSIZE=32 -ffunction-sections -fdata-sections" \
+    --extra-cflags="-O3 -fasm -Wno-psabi -fno-short-enums -fno-strict-aliasing -finline-limit=300 -mcpu=750 -meabi -mhard-float -D_POSIX_THREADS -D__wiiu__ -D__powerpc__ -DFD_SETSIZE=32 -ffunction-sections -fdata-sections" \
+    --extra-ldflags="-Wl,--defsym=pthread_create=0 -Wl,--defsym=pthread_join=0 -Wl,--defsym=pthread_cancel=0 -Wl,--defsym=sysconf=0" \
     --disable-shared \
     --enable-static \
     --enable-zlib \
@@ -96,5 +97,6 @@ make clean
 make -j6 install
 }
 
+export PATH=$PATH:$DEVKITPPC/bin
 build_WUP
 echo WiiU build finished
